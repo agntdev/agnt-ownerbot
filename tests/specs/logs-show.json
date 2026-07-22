@@ -1,19 +1,41 @@
 [
   {
-    "name": "View Logs",
+    "name": "View Logs shows empty state when no logs exist",
     "steps": [
       {
+        "send": { "callback": "logs:show" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": {
+              "text": "📋 No action logs yet.\n\nInstructions you execute will appear here."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "View Logs shows logs after instructions are executed",
+    "steps": [
+      {
+        "send": { "text": "/execute help" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Display recent action logs"
+              "text": "Available instructions:\n• status — system status\n• broadcast <text> — send message to all users\n• set owner <id> — change owner\n• set retention <days> — set log retention\n• help — show this list"
             }
           }
-        ],
-        "send": {
-          "callback": "logs:show"
-        }
+        ]
+      },
+      {
+        "send": { "callback": "logs:show" },
+        "expect": [
+          {
+            "method": "editMessageText"
+          }
+        ]
       }
     ]
   }
