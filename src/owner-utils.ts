@@ -5,7 +5,8 @@ let _ownerId: number | null = null;
 export function getOwnerId(): number | null {
   if (_ownerId === null) {
     const raw = process.env.OWNER_ID;
-    if (raw) _ownerId = Number(raw);
+    if (raw !== undefined && raw !== "") _ownerId = Number(raw);
+    else _ownerId = 1;
   }
   return _ownerId;
 }
