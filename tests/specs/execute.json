@@ -1,19 +1,65 @@
 [
   {
-    "name": "/execute",
+    "name": "/execute without instruction shows usage",
     "steps": [
       {
+        "send": { "text": "/execute" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Submit arbitrary instruction for immediate execution"
+              "text": "Usage: /execute <instruction>\n\nType /help for available instructions."
             }
           }
-        ],
-        "send": {
-          "text": "/execute"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "/execute help instruction returns available commands",
+    "steps": [
+      {
+        "send": { "text": "/execute help" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Available instructions:\n• status — system status\n• broadcast <text> — send message to all users\n• set owner <id> — change owner\n• set retention <days> — set log retention\n• help — show this list"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "non-owner gets access denied on execute",
+    "steps": [
+      {
+        "send": { "text": "/execute status", "userId": 999 },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "⛔ You're not authorized to use this bot."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "execute menu button shows instructions",
+    "steps": [
+      {
+        "send": { "callback": "execute:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": {
+              "text": "⚙️ Owner Execute\n\nSend your instruction as a message starting with /execute.\n\nAvailable instructions:\n• status — system status\n• broadcast <text> — send message to all users\n• set owner <id> — change owner\n• set retention <days> — set log retention\n• help — show this list"
+            }
+          }
+        ]
       }
     ]
   }
